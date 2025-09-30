@@ -1,4 +1,4 @@
-# 🇮🇩 Sentiment Analysis (Bahasa Indonesia) — Enhanced
+# Sentiment Analysis (Bahasa Indonesia) — Enhanced
 
 This project implements a **sentiment analysis pipeline** in Indonesian, enhanced with several improvements for better handling of informal text.
 
