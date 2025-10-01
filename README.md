@@ -1,58 +1,82 @@
-# Sentiment Analysis (Bahasa Indonesia) — Enhanced
+# Sentiment Analysis (Bahasa Indonesia)
 
-This project implements a **sentiment analysis pipeline** in Indonesian, enhanced with several improvements for better handling of informal text.
+Project ini adalah implementasi **Analisis Sentimen pada tweet berbahasa Indonesia** (notebook: `Sentiment Analysis (Bahasa Indonesia) — Versi Tuned (Per Bagian).ipynb`). Notebook berisi seluruh pipeline: preprocessing teks, feature extraction (word + char TF‑IDF), training (Logistic Regression & Multinomial NB), hyperparameter tuning dengan `RandomizedSearchCV`, serta evaluasi dan contoh prediksi.
 
-## ✨ Features & Enhancements
-The notebook combines the *baseline pipeline* with **three main improvements**:
-1. **Normalization of abbreviations** (e.g., `gk → tidak`, `tp → tapi`, etc.)
-2. **Emoji-to-word conversion** (🙂 → *senyum*, 😢 → *sedih*, etc.)
-3. **Filtering of rare words** using `min_df` in TF-IDF (cleaner than manual removal)
+---
 
-### Optional Enhancements
-You can enable additional features (currently commented out):
-- **Character n-grams** → helps with typos and informal spelling
-- **Stopword removal + Sastrawi stemming**
+## 🎯 Ringkasan
+- Format: Jupyter Notebook (dirancang untuk Google Colab / lokal).  
+- Dataset: `tweet.csv` (letakkan di folder yang sama atau set `CSV_PATH` / `DATA_PATH`).  
+- Metode: TF‑IDF (word + char) → model ML klasik (LogisticRegression, MultinomialNB) → RandomizedSearchCV (scoring: `f1_macro`).
 
-## 📂 Dataset
-The dataset used is `tweet.csv`, containing tweets labeled for sentiment.
+---
 
-- **Source**: (describe if known)  
-- **Structure**: Text + sentiment labels (positive, negative, neutral)
+## 📁 Struktur penting
+- `Sentiment Analysis (Bahasa Indonesia) — Versi Tuned (Per Bagian).ipynb` — notebook utama.  
+- `tweet.csv` — dataset yang digunakan (harus berisi kolom teks & label).  
 
-## ⚙️ Workflow Overview
-1. **Data Preprocessing**  
-   - Cleaning text  
-   - Abbreviation expansion  
-   - Emoji translation  
-   - Optional stemming/stopword removal  
+> Notebook menyimpan artefak (model & vectorizer) ke `OUTPUT_DIR` (default di notebook: `/content/drive/My Drive/Proyek/OutputSentimentNew`) dan membuat `artefak_model.zip`.
 
-2. **Feature Extraction**  
-   - TF-IDF (with `min_df` to remove very rare terms)  
-   - Optional: Char n-grams  
+---
 
-3. **Model Training & Evaluation**  
-   - Traditional ML classifiers (Naive Bayes, SVM, Logistic Regression, etc.)  
-   - Performance evaluation with accuracy, precision, recall, F1  
+## 🔧 Persyaratan / Dependencies
+Notebook berisi perintah instalasi (Colab):
 
-## 📊 Results
-- Enhanced pipeline shows improved performance on informal/abbreviated text.
-- Filtering rare words reduces noise and improves generalization.
+```bash
+# di Colab cell (notebook):
+!pip -q install pandas scikit-learn matplotlib joblib nltk Sastrawi imbalanced-learn
+```
 
-## 🚀 Usage
-1. Clone this repo  
-   ```bash
-   git clone https://github.com/your-username/your-repo.git
+Untuk lingkungan lokal, rekomendasi `requirements.txt` minimal:
+
+```
+pandas
+numpy
+scikit-learn
+matplotlib
+joblib
+nltk
+Sastrawi
+imbalanced-learn
+scipy
+```
+
+---
+
+## 🚀 Cara menjalankan (ringkas)
+### Di Google Colab
+1. Buka notebook di Colab.  
+2. Jalankan cell untuk mount Google Drive:
+   ```python
+   from google.colab import drive
+   drive.mount('/content/drive')
    ```
-2. Install dependencies  
-   ```bash
-   pip install -r requirements.txt
+3. Jalankan cell instalasi paket (atau pastikan environment Anda sudah memiliki paket yang diperlukan).  
+4. Set `CSV_PATH` (folder) atau `DATA_PATH` langsung: contoh:
+   ```python
+   CSV_PATH = '/content/drive/My Drive/Proyek/dataset'
+   DATA_PATH = os.path.join(CSV_PATH, 'tweet.csv')
    ```
-3. Run the notebook  
-   ```bash
-   jupyter notebook sentiment_id_enhanced_per_part.ipynb
-   ```
+5. Pastikan variabel `TEXT_COL` dan `LABEL_COL` cocok dengan nama kolom di `tweet.csv` (contoh: `TEXT_COL='tweet'`, `LABEL_COL='label'`).  
+6. Jalankan sel notebook berurutan.
 
-## 🔮 Next Steps
-- Try deep learning (LSTM, BERT-based Indo models)  
-- Expand abbreviation and emoji dictionaries  
-- Apply to larger social media datasets  
+
+---
+
+## 🔎 Isi notebook (step-by-step)
+Notebook terstruktur; berikut step utama yang ada:
+1. **Mount Google Drive** (opsional jika di Colab).  
+2. **Instalasi paket / setup environment** (Colab cell tersedia).  
+3. **Import & konfigurasi** (SEED, stopwords, stemmer Sastrawi, OUTPUT_DIR).  
+4. **Load dataset** (`pd.read_csv(DATA_PATH)`) — pastikan kolom teks & label ada.  
+5. **Preprocessing**: slang normalization, negation marking, hashtag extraction/penanganan, tokenisasi, stopword removal, Sastrawi stemmer.  
+6. **Split**: stratified train/test split.  
+7. **Vectorization**: Word TF‑IDF + Char TF‑IDF + horizontal stack (`scipy.sparse.hstack`).  
+8. **(Opsional) Oversampling**: `imblearn.RandomOverSampler` (dapat diaktifkan di notebook).  
+9. **Model selection**: `RandomizedSearchCV` untuk LogisticRegression & MultinomialNB (scoring `f1_macro`, CV = StratifiedKFold).  
+10. **Retrain & evaluasi** di test set: `classification_report`, `confusion_matrix`, `f1_score (macro)`.  
+11. **Simpan artefak**: `joblib.dump(best_model, model_path)` plus vectorizer (`tfidf_word.joblib`, `tfidf_char.joblib`), lalu zip semua artefak.  
+12. **Contoh prediksi**: fungsi `predict_text(text)` untuk single sample dan contoh batch (CSV -> output CSV) di notebook.
+
+---
+

@@ -1,6 +1,9 @@
-numpy
 pandas
-scipy
+numpy
 scikit-learn
-emoji
-sastrawi
+matplotlib
+joblib
+nltk
+Sastrawi
+imbalanced-learn
+scipy
