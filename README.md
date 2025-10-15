@@ -72,11 +72,10 @@ Notebook terstruktur; berikut step utama yang ada:
 5. **Preprocessing**: slang normalization, negation marking, hashtag extraction/penanganan, tokenisasi, stopword removal, Sastrawi stemmer.  
 6. **Split**: stratified train/test split.  
 7. **Vectorization**: Word TF‑IDF + Char TF‑IDF + horizontal stack (`scipy.sparse.hstack`).  
-8. **(Opsional) Oversampling**: `imblearn.RandomOverSampler` (dapat diaktifkan di notebook).  
-9. **Model selection**: `RandomizedSearchCV` untuk LogisticRegression & MultinomialNB (scoring `f1_macro`, CV = StratifiedKFold).  
-10. **Retrain & evaluasi** di test set: `classification_report`, `confusion_matrix`, `f1_score (macro)`.  
-11. **Simpan artefak**: `joblib.dump(best_model, model_path)` plus vectorizer (`tfidf_word.joblib`, `tfidf_char.joblib`), lalu zip semua artefak.  
-12. **Contoh prediksi**: fungsi `predict_text(text)` untuk single sample dan contoh batch (CSV -> output CSV) di notebook.
+8. **Model selection**: `RandomizedSearchCV` untuk LogisticRegression & MultinomialNB (scoring `f1_macro`, CV = StratifiedKFold).  
+9. **Retrain & evaluasi** di test set: `classification_report`, `confusion_matrix`, `f1_score (macro)`.  
+10. **Simpan artefak**: `joblib.dump(best_model, model_path)` plus vectorizer (`tfidf_word.joblib`, `tfidf_char.joblib`), lalu zip semua artefak.  
+11. **Contoh prediksi**: fungsi `predict_text(text)` untuk single sample dan contoh batch (CSV -> output CSV) di notebook.
 
 ---
 
